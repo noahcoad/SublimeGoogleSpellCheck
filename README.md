@@ -27,7 +27,7 @@ Multiple cursors/selections are all checked in one go. Capitalization is preserv
 If nothing changes, Google thinks your spelling is fine. Select more words to give it context.
 
 ## Key Binding
-No key binding is claimed by default, so nothing of yours gets clobbered. The suggested one ships commented out — open it via **Preferences → Package Settings → Google Spell Check → Key Bindings** (or the Command Palette → *Preferences: Google Spell Check Key Bindings*) and copy this line to the right-hand User side:
+No key binding is claimed by default, so nothing of yours gets clobbered. The suggested one lives in `Example.sublime-keymap`, which Sublime never loads — open it via **Preferences → Package Settings → Google Spell Check → Example Key Bindings** (or the Command Palette → *Preferences: Google Spell Check Example Key Bindings*) and copy this line to the right-hand User side:
 
 ```json
 { "keys": ["ctrl+alt+g"], "command": "google_spell_check" },

@@ -4,12 +4,12 @@ Google Spell Check 2.1.0
 The ctrl+alt+g key binding is no longer shipped by default.
 
 Package Control's guidance is that packages shouldn't claim a key binding out of
-the box, so it now ships commented out and you opt in. If you were using it:
+the box, so it's now a copy-paste example you opt into. If you were using it:
 
-  Preferences > Package Settings > Google Spell Check > Key Bindings
+  Preferences > Package Settings > Google Spell Check > Example Key Bindings
 
-(or the command palette: "Preferences: Google Spell Check Key Bindings"), then
-copy this line to the right-hand User side:
+(or the command palette: "Preferences: Google Spell Check Example Key
+Bindings"), then copy this line to the right-hand User side:
 
   { "keys": ["ctrl+alt+g"], "command": "google_spell_check" },
 

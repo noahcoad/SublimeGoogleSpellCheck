@@ -1,0 +1,7 @@
+[
+	// Google Spell Check claims no key binding by default, so nothing of yours gets
+	// clobbered. Sublime never loads this file -- copy the line below to the right
+	// (User) side to enable it.
+
+	{ "keys": ["ctrl+alt+g"], "command": "google_spell_check" },
+]

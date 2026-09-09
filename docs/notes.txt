@@ -82,6 +82,17 @@ revision log
 		channel entry is now a single release: { "sublime_text": ">=4107", "tags": true }.
 		dropped the <3000 st2 entry and the >=3000 st3 branch entry.
 		>=4107 not >=3000 because of the html.unescape floor.
+		v2.1.2: the bot on the NEW pr (#9556) rejected the telescope pattern that braver himself
+		recommended on TaskList #9222. st_package_reviewer has moved on since then. 2 FAILURES,
+		both the same omission: an edit_settings entry for a keymap MUST set
+		args.user_file = "${packages}/User/Default (${platform}).sublime-keymap", not just
+		base_file + default. plus a tip: a Default.sublime-keymap holding only commented-out
+		examples should be an Example.sublime-keymap instead -- sublime never loads that file,
+		so the examples can be left UNCOMMENTED for easier copy/paste, and the menu caption
+		becomes "Example Key Bindings".
+		followed the bot exactly. this is a divergence from TaskList/AutoOpenReadme, which
+		still use base_file+default w/ no user_file -- THEY WILL HIT THE SAME 2 FAILURES on
+		their next bot run (#9222/#9555). worth fixing there too.
 		v2.1.1: the channel PR TEMPLATE (not the bot) has a checkbox "my package doesn't add
 		context menu entries", w/ a footnote that if you do need one it must be conditional.
 		rather than drop the right-click, GoogleSpellCheckCommand grew is_visible() over an

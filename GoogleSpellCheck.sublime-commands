@@ -4,11 +4,11 @@
 		"command": "google_spell_check"
 	},
 	{
-		"caption": "Preferences: Google Spell Check Key Bindings",
+		"caption": "Preferences: Google Spell Check Example Key Bindings",
 		"command": "edit_settings",
 		"args": {
-			"base_file": "${packages}/Google Spell Check/Default.sublime-keymap",
-			"default": "[\n\t$0\n]\n"
+			"base_file": "${packages}/Google Spell Check/Example.sublime-keymap",
+			"user_file": "${packages}/User/Default (${platform}).sublime-keymap"
 		}
 	}
 ]
