@@ -80,10 +80,13 @@ revision log
 		archive package control downloads doesn't carry them. .python-version deliberately
 		NOT export-ignored.
 		channel entry is now a single release: { "sublime_text": ">=4107", "tags": true }.
-		dropped the <3000 st2 entry (the st2 branch is already gone from the remote) and
-		the >=3000 st3 branch entry. >=4107 not >=3000 because of the html.unescape floor.
-		st3 branch still exists on the remote -- do NOT delete it until the new channel PR
-		merges, since the live channel entry still points at it.
+		dropped the <3000 st2 entry and the >=3000 st3 branch entry.
+		>=4107 not >=3000 because of the html.unescape floor.
+		both st2 and st3 still exist on the remote (`git ls-remote --heads origin` -- a
+		plain `git branch -a` did NOT show st2, the local fetch was stale). do NOT delete
+		either until the new channel PR merges: the LIVE channel entry still points at
+		both branches, so deleting them breaks installs of the currently-published
+		package until the crawler picks up the new entry.
 
 	testing note
 		tests need network and take ~1 min w/ the 0.8s throttle. without the throttle the
