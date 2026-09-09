@@ -55,7 +55,7 @@ Needs a network connection. Covers misspellings that must be corrected, correctl
 * **Package Control** (recommended): `Package Control: Install Package` → **Google Spell Check**
 * **Manual**: clone into your Sublime `Packages` folder
   ```bash
-  git clone https://github.com/noahcoad/google-spell-check.git "Google Spell Check"
+  git clone https://github.com/noahcoad/SublimeGoogleSpellCheck.git "Google Spell Check"
   ```
 
 Requires **Sublime Text 4** (build 4107+). The package ships a `.python-version` of `3.8`, so it runs in ST4's 3.8 plugin host — ST3's 3.3 host lacks `html.unescape`.
@@ -69,6 +69,6 @@ Requires **Sublime Text 4** (build 4107+). The package ships a `.python-version`
 MIT — see [LICENSE](LICENSE).
 
 ## Finally
-See also: [Open URL](https://github.com/noahcoad/open-url), another Sublime package.
+See also: [Open URL](https://github.com/noahcoad/SublimeOpenUrl), another Sublime package.
 
 Author: [@noahcoad](http://twitter.com/noahcoad) writes software for the heck of it and to make life just a little more efficient.

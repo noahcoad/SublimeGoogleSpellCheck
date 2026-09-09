@@ -1,6 +1,6 @@
 # Replaces the word under the cursor or selection with Google's recommended spelling.
 # Silent: if Google has no clear respelling, the text is left alone.
-# Hosted at http://github.com/noahcoad/google-spell-check
+# Hosted at https://github.com/noahcoad/SublimeGoogleSpellCheck
 
 import sublime, sublime_plugin
 import urllib.request, urllib.parse, json, re, html, threading, time

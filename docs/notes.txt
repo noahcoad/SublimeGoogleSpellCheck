@@ -1,6 +1,12 @@
 created by Noah Coad 2013-06-24 02:39pm
 
-posted at https://github.com/noahcoad/google-spell-check
+posted at https://github.com/noahcoad/SublimeGoogleSpellCheck
+	(repo renamed from google-spell-check 2026-09-08 to match the SublimeXxx convention.
+	the CHANNEL name stays "Google Spell Check" -- that string is the installed folder
+	name, so renaming it would orphan every existing install and break the
+	${packages}/Google Spell Check/... paths in Main.sublime-menu + .sublime-commands.
+	package control's naming rules also say keep "Sublime" OUT of the package name;
+	the repo name is explicitly fine.)
 
 backlog
 	ideas
