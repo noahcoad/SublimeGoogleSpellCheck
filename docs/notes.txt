@@ -99,6 +99,11 @@ revision log
 		followed the bot exactly. this is a divergence from TaskList/AutoOpenReadme, which
 		still use base_file+default w/ no user_file -- THEY WILL HIT THE SAME 2 FAILURES on
 		their next bot run (#9222/#9555). worth fixing there too.
+		v2.1.3: repo renamed google-spell-check -> SublimeGoogleSpellCheck. 121 stars, 19 forks,
+		and the 2013 creation date all survive a `gh repo rename`, and github redirects the old
+		url (git remote, web, api). fixed the 6 in-repo self-references, then AMENDED the details
+		url onto the existing channel commit rather than adding a second one, so #9556 stays a
+		single clean commit -- the force-push is also what re-triggers the bot. still green.
 		v2.1.1: the channel PR TEMPLATE (not the bot) has a checkbox "my package doesn't add
 		context menu entries", w/ a footnote that if you do need one it must be conditional.
 		rather than drop the right-click, GoogleSpellCheckCommand grew is_visible() over an
