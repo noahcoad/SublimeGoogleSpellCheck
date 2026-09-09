@@ -32,7 +32,7 @@ revision log
 		st2/st3 branches retired, everything on master. package control channel PR:
 		https://github.com/sublimehq/package_control_channel/pull/9501
 		(note: wbond/package_control_channel now redirects to sublimehq/)
-	2026-07-27, tests/test_correct.py added, live corpus run w/ `python3 tests/test_correct.py`
+	2026-07-27, tests/test_correct.py added, live corpus run w/ `py tests/test_correct.py`
 		"battery terminalss" exposed a bug: a doubled trailing letter was rejected by the
 		src.startswith(cand) guard, which was there to stop "receive" -> "received".
 		both are a 1-char difference at the end, so the rule had to become asymmetric --
@@ -58,6 +58,32 @@ revision log
 		50 cases pass. the 4 new correct multi-word phrases matter most: the per-word path
 		is the riskiest thing here for silent replacement, so it needs pinning down that it
 		leaves good text alone.
+	2026-09-08, package control resubmission, tagged v2.1.0
+		PR #9501 was CLOSED by braver 2026-08-30, not merged. reason: he asked (twice) to
+		switch the entry from branch-based to `"tags": true` -- "branch based releases are
+		on the way out" -- and the change never got made, so he closed it.
+		the st_package_reviewer bot on that PR also flagged, and all of it is now fixed:
+			FAIL, ['ctrl+alt+g'] binding has no context. fixed the way braver asked on
+				TaskList #9222 instead of using Example.sublime-keymap: Default.sublime-keymap
+				now holds the binding COMMENTED OUT, w/ a Main.sublime-menu > Key Bindings
+				entry (edit_settings) and a "Preferences: ..." palette command to find it.
+				user-visible change -- existing users lose ctrl+alt+g, so messages/2.1.0.txt
+				tells them how to get it back.
+			WARN, no top-level LICENSE. added, MIT, 2013-2026.
+			no Main.sublime-menu at all. added.
+		found while auditing: .gitignore was ignoring .python-version, so the file existed
+		locally but was NEVER committed. an installed copy would have landed in ST4's 3.3
+		plugin host and died on html.unescape (3.4+). this is the real bug of this pass --
+		the tests all run outside sublime so nothing caught it. now tracked, and the
+		gitignore carries a comment saying why it must not be re-added.
+		added .gitattributes: eol=lf + export-ignore for docs/ and tests/ so the tag
+		archive package control downloads doesn't carry them. .python-version deliberately
+		NOT export-ignored.
+		channel entry is now a single release: { "sublime_text": ">=4107", "tags": true }.
+		dropped the <3000 st2 entry (the st2 branch is already gone from the remote) and
+		the >=3000 st3 branch entry. >=4107 not >=3000 because of the html.unescape floor.
+		st3 branch still exists on the remote -- do NOT delete it until the new channel PR
+		merges, since the live channel entry still points at it.
 
 	testing note
 		tests need network and take ~1 min w/ the 0.8s throttle. without the throttle the

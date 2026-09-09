@@ -2,5 +2,13 @@
 	{
 		"caption": "Google Spell Check",
 		"command": "google_spell_check"
+	},
+	{
+		"caption": "Preferences: Google Spell Check Key Bindings",
+		"command": "edit_settings",
+		"args": {
+			"base_file": "${packages}/Google Spell Check/Default.sublime-keymap",
+			"default": "[\n\t$0\n]\n"
+		}
 	}
 ]

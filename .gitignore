@@ -5,7 +5,8 @@ __pycache__/
 .venv/
 venv/
 .pytest_cache/
-.python-version
+# NOTE: .python-version is intentionally NOT ignored -- ST4 reads it from the
+# package root to pick the 3.8 plugin host. It must ship with the package.
 
 # Sublime
 *.sublime-project

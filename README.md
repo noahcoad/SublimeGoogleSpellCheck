@@ -17,14 +17,21 @@ Google has a far better spell checker than most tools:
 ## How to Use
 1. Select some text, or put the cursor on a word
 1. Run **Google Spell Check**
-	* hotkey `ctrl+alt+g`
 	* right-click context menu → Google Spell Check
 	* Command Palette (`ctrl+shift+p` / `cmd+shift+p`) → Google Spell Check
+	* or a key binding of your own — see below
 1. The status bar shows progress, then the correction
 
 Multiple cursors/selections are all checked in one go. Capitalization is preserved (`Avalible` → `Available`, `AVALIBLE` → `AVAILABLE`).
 
 If nothing changes, Google thinks your spelling is fine. Select more words to give it context.
+
+## Key Binding
+No key binding is claimed by default, so nothing of yours gets clobbered. The suggested one ships commented out — open it via **Preferences → Package Settings → Google Spell Check → Key Bindings** (or the Command Palette → *Preferences: Google Spell Check Key Bindings*) and copy this line to the right-hand User side:
+
+```json
+{ "keys": ["ctrl+alt+g"], "command": "google_spell_check" },
+```
 
 ## How It Works
 This uses Google's public autocomplete/suggest endpoint (`suggestqueries.google.com`), which returns explicit spell-correction metadata — Google marks *"you typed X, I think you meant Y"*. That flag is what makes silent replacement safe: without it, the plugin doesn't touch your text.
@@ -39,7 +46,7 @@ No API key required. It isn't an officially supported API, so Google changing th
 `tests/test_correct.py` runs the correction logic against the live endpoint, stubbing the `sublime` modules so the plugin imports outside the editor:
 
 ```bash
-python3 tests/test_correct.py
+py tests/test_correct.py
 ```
 
 Needs a network connection. Covers misspellings that must be corrected, correctly spelled text that must be left untouched, case preservation, and offline input guards.
@@ -51,11 +58,15 @@ Needs a network connection. Covers misspellings that must be corrected, correctl
   git clone https://github.com/noahcoad/google-spell-check.git "Google Spell Check"
   ```
 
-Requires Sublime Text 3 or later (Python 3.3+ plugin host).
+Requires **Sublime Text 4** (build 4107+). The package ships a `.python-version` of `3.8`, so it runs in ST4's 3.8 plugin host — ST3's 3.3 host lacks `html.unescape`.
 
 ## Update Notices
+* *2026-09-08* (**v2.1.0**), Package Control housekeeping: added a `LICENSE`, started shipping `.python-version` (it was accidentally gitignored, which would have left an installed copy in the 3.3 plugin host), added the Preferences menu, and stopped claiming `ctrl+alt+g` by default — it now ships commented out for you to opt into. See [Key Binding](#key-binding).
 * *2026-07-27* (**v2.0.0**), rewritten for Python 3 / ST4. The old version scraped the Google search results page for "Did you mean" — Google removed that markup, so it silently stopped working. Now uses the suggest endpoint's spell-correction metadata, falls back to per-word checking, checks all selections at once, preserves case and spacing, and reports connection failures instead of failing quietly. The `st2` and `st3` branches are retired; everything lives on `master`.
 * *2013-10-14*, Sublime Text 3 version added.
+
+## License
+MIT — see [LICENSE](LICENSE).
 
 ## Finally
 See also: [Open URL](https://github.com/noahcoad/open-url), another Sublime package.

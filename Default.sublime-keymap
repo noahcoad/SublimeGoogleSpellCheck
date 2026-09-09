@@ -1,3 +1,6 @@
 [
-	{ "keys": ["ctrl+alt+g"], "command": "google_spell_check" }
+	// Google Spell Check ships no key binding by default, to avoid clobbering yours.
+	// Copy the line below to the right (user) side to enable it.
+
+	// { "keys": ["ctrl+alt+g"], "command": "google_spell_check" },
 ]

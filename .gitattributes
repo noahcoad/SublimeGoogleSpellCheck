@@ -1,0 +1,9 @@
+# Normalize line endings in the repo; Sublime reads LF fine on every platform.
+* text=auto eol=lf
+
+# Keep dev-only files out of the release archive Package Control downloads.
+# NOTE: .python-version must ship -- ST4 reads it to pick the 3.8 plugin host.
+docs/		export-ignore
+tests/		export-ignore
+.gitattributes	export-ignore
+.gitignore	export-ignore
