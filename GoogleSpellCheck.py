@@ -139,12 +139,21 @@ def _correct_words(src):
 
 
 class GoogleSpellCheckCommand(sublime_plugin.TextCommand):
-	def run(self, edit):
+	def is_visible(self):
+		# keeps the context menu entry conditional -- it only shows when there's
+		# actually a word or selection to check
+		return bool(self._regions())
+
+	def _regions(self):
 		regions = []
 		for sel in self.view.sel():
 			r = sel if not sel.empty() else self.view.word(sel)
 			if not self.view.substr(r).strip(): continue
 			regions.append((r.a, r.b))
+		return regions
+
+	def run(self, edit):
+		regions = self._regions()
 		if not regions:
 			sublime.status_message('Google Spell Check: nothing to check')
 			return

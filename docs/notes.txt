@@ -82,6 +82,11 @@ revision log
 		channel entry is now a single release: { "sublime_text": ">=4107", "tags": true }.
 		dropped the <3000 st2 entry and the >=3000 st3 branch entry.
 		>=4107 not >=3000 because of the html.unescape floor.
+		v2.1.1: the channel PR TEMPLATE (not the bot) has a checkbox "my package doesn't add
+		context menu entries", w/ a footnote that if you do need one it must be conditional.
+		rather than drop the right-click, GoogleSpellCheckCommand grew is_visible() over an
+		extracted _regions(), so the entry only appears when there's a word or selection to
+		check. also hides the palette entry when there's nothing -- fine, arguably better.
 		both st2 and st3 still exist on the remote (`git ls-remote --heads origin` -- a
 		plain `git branch -a` did NOT show st2, the local fetch was stale). do NOT delete
 		either until the new channel PR merges: the LIVE channel entry still points at
