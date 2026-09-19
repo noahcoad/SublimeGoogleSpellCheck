@@ -1,0 +1,11 @@
+Google Spell Check 2.2.1
+========================
+
+"Google Spell Check: Fix" is back to touching nothing but the spelling.
+
+2.2.0 briefly had it move your selection onto the words it corrected. That's useful
+feedback but it's a surprise from a command whose job is to fix spelling quietly, and it
+made the next keystroke overwrite the correction.
+
+If you do want to see what changed, that's what "Google Spell Check: Fix and Highlight"
+is for -- same edits, each correction squiggled and annotated.

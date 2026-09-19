@@ -311,9 +311,7 @@ class GoogleSpellCheckFixHighlightCommand(_CheckCommand):
 		self.view.erase_regions(HIGHLIGHT_KEY)
 		if not self._ready(fixes, errors): return
 		spots = _fixed_spots(self.view, fixes)					# where they'll land, before replacing
-		# no selection here -- the squiggles are the feedback, and selecting on top of them
-		# would only make the next keystroke eat the correction
-		self.view.run_command('google_spell_check_replace', {'fixes': fixes, 'select': False})
+		self.view.run_command('google_spell_check_replace', {'fixes': fixes})
 		words = [w for _, w in spots]
 		# mark on the next tick: regions added in the same one are still mapped through the
 		# replacement, which shifts every one of them right by the length of the new text
@@ -331,18 +329,9 @@ class GoogleSpellCheckClearHighlightsCommand(sublime_plugin.TextCommand):
 
 
 class GoogleSpellCheckReplaceCommand(sublime_plugin.TextCommand):
-	def run(self, edit, fixes, select=True):
-		# back to front so earlier replacements don't shift later regions -- which also
-		# means each new extent is just (start, start + len(text)), no offset bookkeeping
-		corrected = []
+	def run(self, edit, fixes):
+		# back to front so earlier replacements don't shift later regions. the selection is
+		# deliberately left alone -- sublime carries it over the replacement on its own, and
+		# moving it would be a surprise from a command whose job is to fix spelling
 		for f in sorted(fixes, key=lambda x: x['region'][0], reverse=True):
-			text, a = f['text'], f['region'][0]
-			self.view.replace(edit, sublime.Region(*f['region']), text)
-			lead = len(text) - len(text.lstrip())		# don't select whitespace we merely preserved
-			corrected.append(sublime.Region(a + lead, a + len(text.rstrip())))
-		# select what changed: visible feedback that costs no new UI, clears itself the
-		# moment you type, and leaves the correction ready to retype or delete
-		if corrected and select:
-			sel = self.view.sel()
-			sel.clear()
-			sel.add_all(corrected)
+			self.view.replace(edit, sublime.Region(*f['region']), f['text'])

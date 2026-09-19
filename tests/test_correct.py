@@ -220,8 +220,6 @@ def check_fix_highlight():
 	cmd._done([{'region': [0, len(run)], 'text': fix}], 0, 1)
 	if not cmd.view.replaced or cmd.view.replaced[0][0] != 'google_spell_check_replace':
 		fails.append('fix+highlight did not apply the fix: %r' % (cmd.view.replaced,))
-	elif cmd.view.replaced[0][1].get('select') is not False:
-		fails.append('fix+highlight selected as well as marking: %r' % (cmd.view.replaced[0][1],))
 	# marking MUST wait for the next tick -- in the same one sublime maps the regions
 	# through the replacement and shifts them all right by the length of the new text
 	if cmd.view.marked:
@@ -234,17 +232,11 @@ def check_fix_highlight():
 	if 'fixed another one, dust' not in STATUS[-1]:
 		fails.append('fix+highlight status wrong: %r' % STATUS[-1])
 
-	# and the replace command honours select=False
-	rep = gsc.GoogleSpellCheckReplaceCommand(None)
-	rep.view = _FakeView()
-	rep.run(None, [{'region': [0, 8], 'text': 'available'}], select=False)
-	if rep.view.sel().regions:
-		fails.append('select=False still moved the selection: %r' % (rep.view.sel().regions,))
 	return fails
 
 
 def check_selection():
-	"""Offline: replacing selects exactly the corrected words, whitespace excluded."""
+	"""Offline: Fix replaces back to front and leaves the selection completely alone."""
 	fails = []
 	cmd = gsc.GoogleSpellCheckReplaceCommand(None)
 	cmd.view = _FakeView()
@@ -254,12 +246,18 @@ def check_selection():
 
 	if [a[1].a for a in cmd.view.replaced] != [20, 0]:
 		fails.append('replacements not applied back to front: %r' % ([a[1].a for a in cmd.view.replaced],))
-	if not cmd.view.sel().cleared:
-		fails.append('selection was not cleared before selecting the corrections')
-	got = sorted((r.a, r.b) for r in cmd.view.sel().regions)
-	# (0,9) is 'Available'; (21,29) is 'tomorrow' without the preserved spaces
-	if got != [(0, 9), (21, 29)]:
-		fails.append('selected %r, wanted [(0, 9), (21, 29)]' % (got,))
+	# Fix's whole contract is that it fixes the spelling and touches nothing else
+	if cmd.view.sel().cleared or cmd.view.sel().regions:
+		fails.append('Fix moved the selection: cleared=%r regions=%r'
+					 % (cmd.view.sel().cleared, cmd.view.sel().regions))
+
+	cmd = gsc.GoogleSpellCheckCommand(None)
+	cmd.view = _FakeView('avalible')
+	cmd._done([{'region': [0, 8], 'text': 'available'}], 0, 1)
+	if cmd.view.marked:
+		fails.append('Fix added highlights: %r' % (cmd.view.marked,))
+	if 'available' not in STATUS[-1]:
+		fails.append('Fix did not name the correction: %r' % STATUS[-1])
 	return fails
 
 
@@ -296,8 +294,8 @@ def main():
 		if got != expected:
 			fails.append('case %r -> %r, wanted %r' % (text, got, expected))
 
-	# +3 highlight, +3 selection, +9 word-highlight, +7 fix-and-highlight
-	total = len(OFFLINE) + len(MISSPELLED) + len(CORRECT) + 2 + 3 + 3 + 9 + 7
+	# +3 highlight, +4 selection, +9 word-highlight, +5 fix-and-highlight
+	total = len(OFFLINE) + len(MISSPELLED) + len(CORRECT) + 2 + 3 + 4 + 9 + 5
 	if fails:
 		print('\n%d of %d failed:' % (len(fails), total))
 		for f in fails: print('  ' + f)

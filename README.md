@@ -17,7 +17,7 @@ Google has a far better spell checker than most tools:
 ## The Commands
 | Command | What it does |
 |---|---|
-| **Google Spell Check: Fix** | Replaces the misspellings and leaves the corrected words selected |
+| **Google Spell Check: Fix** | Replaces the misspellings, silently, and touches nothing else |
 | **Google Spell Check: Fix and Highlight** | Replaces them *and* marks each one, so you can see what it changed |
 | **Google Spell Check: Highlight Only** | Marks what it *would* change and touches nothing |
 | **Google Spell Check: Clear Highlights** | Removes the marks |
@@ -32,7 +32,7 @@ Google has a far better spell checker than most tools:
 
 Multiple cursors/selections are all checked in one go. Capitalization is preserved (`Avalible` → `Available`, `AVALIBLE` → `AVAILABLE`).
 
-**Corrected words are left selected** so you can see exactly what changed — one selection per correction. Type to replace it, or click anywhere to dismiss. If you'd rather see them marked than selected, use **Fix and Highlight** instead: it makes the same edits but squiggles each correction and annotates it, which survives your next keystroke.
+**Fix changes nothing but the spelling** — your selection and any existing highlights are left as they were. To see what it changed, use **Fix and Highlight** instead: same edits, but each correction gets squiggled and annotated.
 
 If nothing changes, Google thinks your spelling is fine. Select more words to give it context.
 
@@ -86,7 +86,8 @@ Needs a network connection. Covers misspellings that must be corrected, correctl
 Requires **Sublime Text 4** (build 4107+). The package ships a `.python-version` of `3.8`, so it runs in ST4's 3.8 plugin host — ST3's 3.3 host lacks `html.unescape`.
 
 ## Update Notices
-* *2026-09-19* (**v2.2.0**), three new commands and a clearer naming: the original command is now **Google Spell Check: Fix** in the palette (the command name `google_spell_check` is unchanged, so existing key bindings keep working), joined by **Fix and Highlight**, **Highlight Only**, and **Clear Highlights**. See [The Commands](#the-commands) and [Highlight Only](#highlight-only-look-before-you-leap). Corrected words are now left **selected**, only the misspelled words are marked rather than the whole selection, the status bar lists the corrections, and words run together (`anotherone` → `another one`) are fixed.
+* *2026-09-19* (**v2.2.1**), **Fix** is back to touching nothing but the spelling — v2.2.0 briefly had it move your selection onto the corrected words. If you want to see what changed, that's what **Fix and Highlight** is for.
+* *2026-09-19* (**v2.2.0**), three new commands and a clearer naming: the original command is now **Google Spell Check: Fix** in the palette (the command name `google_spell_check` is unchanged, so existing key bindings keep working), joined by **Fix and Highlight**, **Highlight Only**, and **Clear Highlights**. See [The Commands](#the-commands) and [Highlight Only](#highlight-only-look-before-you-leap). Only the misspelled words are marked rather than the whole selection, the status bar lists the corrections, and words run together (`anotherone` → `another one`) are now fixed.
 * *2026-09-08* (**v2.1.0**), Package Control housekeeping: added a `LICENSE`, started shipping `.python-version` (it was accidentally gitignored, which would have left an installed copy in the 3.3 plugin host), added the Preferences menu, and stopped claiming `ctrl+alt+g` by default — it now ships commented out for you to opt into. See [Key Binding](#key-binding).
 * *2026-07-27* (**v2.0.0**), rewritten for Python 3 / ST4. The old version scraped the Google search results page for "Did you mean" — Google removed that markup, so it silently stopped working. Now uses the suggest endpoint's spell-correction metadata, falls back to per-word checking, checks all selections at once, preserves case and spacing, and reports connection failures instead of failing quietly. The `st2` and `st3` branches are retired; everything lives on `master`.
 * *2013-10-14*, Sublime Text 3 version added.

@@ -3,7 +3,7 @@ Google Spell Check 2.2.0
 
 Four commands now, named for what they do.
 
-  Google Spell Check: Fix                  fix the spelling (this is the old command)
+  Google Spell Check: Fix                  fix the spelling, change nothing else
   Google Spell Check: Fix and Highlight    fix it, and mark what changed
   Google Spell Check: Highlight Only       mark what WOULD change, touch nothing
   Google Spell Check: Clear Highlights     remove the marks
@@ -30,9 +30,8 @@ right-click), or by closing the annotations with the x at their right edge.
 
 Fix and Highlight.
 
-The middle ground: it makes the edits AND leaves every correction marked, so you can
-see what it did. Unlike Fix it doesn't select anything, so the marks survive your next
-keystroke.
+The middle ground: it makes the edits AND leaves every correction marked, so you can see
+what it did. Fix itself stays silent -- it changes the spelling and nothing else.
 
 The status bar lists the corrections.
 
@@ -47,12 +46,6 @@ Words run together are now corrected.
 more words than you typed for these, which used to be rejected outright as an extension
 of your text rather than a correction of it. A run-together word and a typo beside it
 are reported separately, too -- "anotherone bites the dustr" lists "another one, dust".
-
-Corrected words are now selected.
-
-The Fix command leaves every word it corrected selected, so you can see at a glance what
-changed. Type to replace it, or just click anywhere to dismiss. With several selections
-at once you get one selection per correction.
 
 The example key bindings cover all three:
 
