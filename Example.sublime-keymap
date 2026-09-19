@@ -1,7 +1,14 @@
 [
 	// Google Spell Check claims no key binding by default, so nothing of yours gets
-	// clobbered. Sublime never loads this file -- copy the line below to the right
-	// (User) side to enable it.
+	// clobbered. Sublime never loads this file -- copy the lines below to the right
+	// (User) side to enable them.
 
+	// Fix the spelling:
 	{ "keys": ["ctrl+alt+g"], "command": "google_spell_check" },
+
+	// Fix it and leave the corrections marked, so you can see what changed:
+	{ "keys": ["ctrl+alt+shift+g"], "command": "google_spell_check_fix_highlight" },
+
+	// Highlight what would change, without touching the buffer:
+	{ "keys": ["ctrl+alt+h"], "command": "google_spell_check_highlight" },
 ]

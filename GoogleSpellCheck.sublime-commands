@@ -1,7 +1,19 @@
 [
 	{
-		"caption": "Google Spell Check",
+		"caption": "Google Spell Check: Fix",
 		"command": "google_spell_check"
+	},
+	{
+		"caption": "Google Spell Check: Fix and Highlight",
+		"command": "google_spell_check_fix_highlight"
+	},
+	{
+		"caption": "Google Spell Check: Highlight Only",
+		"command": "google_spell_check_highlight"
+	},
+	{
+		"caption": "Google Spell Check: Clear Highlights",
+		"command": "google_spell_check_clear_highlights"
 	},
 	{
 		"caption": "Preferences: Google Spell Check Example Key Bindings",
