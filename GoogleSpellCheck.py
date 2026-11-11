@@ -95,6 +95,29 @@ def correct(text):
 	return _correct_words(src)
 
 
+def _flagged(low, za, zb):
+	"""The correction of low from one flagged row, or None if the row isn't about low.
+	zb wraps each typo in <se>, za wraps its fix in <sc>, in the same order. google often
+	flags your text only inside a longer completion -- "<se>alot</se> of people <se>dont</se>
+	like me" -- so pair the tags up and keep only the swaps that fall within what you typed."""
+	pa, pb = re.split(r'<sc>(.*?)</sc>', za), re.split(r'<se>(.*?)</se>', zb)
+	if len(pa) != len(pb): return None
+	plain = lambda t: html.unescape(re.sub(r'<.*?>', '', t))
+	typed, out = '', ''
+	for i, (a, b) in enumerate(zip(map(plain, pa), map(plain, pb))):
+		if i % 2 == 0:
+			if a.lower() != b.lower(): return None		# untagged text must agree, or the pairing is off
+			n = len(low) - len(typed.lstrip())			# how much of this plain run is still yours
+			if n <= len(b):
+				if not (typed + b).lstrip().lower().startswith(low): return None
+				if n < len(b) and not b[n].isspace(): return None	# ends mid-word
+				return (out + a[:n]).strip()
+		else:
+			if len((typed + b).lstrip()) > len(low): return None	# a flagged word straddles the end
+		typed, out = typed + b, out + a
+	return None
+
+
 def _correct_phrase(src):
 	"""A respelling of the whole phrase, AGREE if google echoed it back, else None."""
 	data = _fetch(src)
@@ -107,8 +130,8 @@ def _correct_phrase(src):
 		meta = row[3] if len(row) > 3 and isinstance(row[3], dict) else {}
 		za, zb = meta.get('za'), meta.get('zb')
 		if not (za and zb): continue
-		if _detag(zb).lower() != low: continue
-		cand = _detag(za)
+		cand = _flagged(low, za, zb)
+		if not cand: continue
 		if cand.lower() == low: continue
 		# same word count, or a re-spacing google flagged outright
 		if len(cand.split()) == nwords or _plausible(low, cand.lower()):

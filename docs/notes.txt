@@ -114,6 +114,33 @@ revision log
 		either until the new channel PR merges: the LIVE channel entry still points at
 		both branches, so deleting them breaks installs of the currently-published
 		package until the crawler picks up the new entry.
+	2026-11-09, issue #32: "recieve" alone was left unchanged
+		google drift, not a logic regression -- the endpoint stopped returning a bare
+		"receive" row. the only rows flagging "recieve" itself carry a completion:
+		zb "<se>recieve</se> in spanish", za "<sc>receive</sc> in spanish". the explicit
+		branch demanded zb == what you typed, so it never fired.
+		first fix: _flagged() dropped trailing words za and zb share before comparing.
+		replaced same day by tag pairing (below).
+		the issue's own diagnosis was off: the cand.startswith(src) guard never fired
+		("received" doesn't start with "recieve"), and its suggested loosening would have
+		produced "received" -- the wrong word. offline test replays google's exact rows.
+		still failing, separate drift: "alot of people" -> google now echoes it verbatim
+		(AGREE), so it's left alone. fails on the pre-fix code too.
+	2026-11-10, flagged rows: pair <se>/<sc> tags instead of comparing plain text
+		google echoes popular misspellings as normal queries ("alot", "alot of people"), and
+		flags them only inside a longer completion that ALSO fixes a later word:
+		zb "<se>alot</se> of people <se>dont</se> like me". suffix stripping stopped at
+		"dont" -> "don't", so the row never matched, the echo won, and AGREE also skipped
+		the per-word pass.
+		_flagged() now splits za/zb on their tags, requires the untagged runs to agree (so
+		the pairing is trustworthy), walks zb until what you typed is used up, and applies
+		only the swaps inside it. rejects a match ending mid-word or a flagged word that
+		straddles the end. the explicit loop already runs before the echo check, so a flag
+		anywhere in the results now beats a verbatim echo.
+		fixes "alot of people", "alot of money". 88/88 pass. still unfixed: bare "alot" and
+		"i like alot" -- google flags them nowhere at all, no row to pair.
+		"their going home" -> "they're", "dont worry" -> "don't": grammar, not spelling, but
+		google flags them explicitly and the old code did the same. unchanged.
 
 	testing note
 		tests need network and take ~1 min w/ the 0.8s throttle. without the throttle the

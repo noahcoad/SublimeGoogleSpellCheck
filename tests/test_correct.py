@@ -261,8 +261,52 @@ def check_selection():
 	return fails
 
 
+def check_flagged():
+	"""Offline: a typo google flags only inside a completion is still corrected (issue #32)."""
+	fails = []
+	row = lambda a, b, rest='': ['<b>x</b>', 0, [], {'za': '<sc>%s</sc>%s' % (a, rest), 'zb': '<se>%s</se>%s' % (b, rest)}]
+	# google's actual answer for "recieve", 2026-11-09: no bare "receive" row at all
+	rows = [row('receiver', 'reciever'), row('received', 'recieved'), row('receives', 'recieves'),
+			row('received', 'recieved', ' synonym'), row('receive', 'recieve', ' in spanish')]
+	real = gsc._fetch
+	gsc._fetch = lambda text: ['recieve', rows]
+	try:
+		for text, want in [('recieve', 'receive'), ('Recieve', 'Receive')]:
+			got = gsc.correct(text)
+			if got != want: fails.append('flagged-in-completion %r -> %r, wanted %r' % (text, got, want))
+	finally:
+		gsc._fetch = real
+	# google echoes "alot of people" verbatim, and flags it only inside a longer completion
+	# that also fixes a later word -- the flag must still win over the echo
+	rows = [['alot of people', 0, []], ['alot of people<b> synonym</b>', 0, []],
+			['x', 0, [], {'za': '<sc>a lot</sc> of people <sc>don&#39;t</sc> like me',
+						  'zb': '<se>alot</se> of people <se>dont</se> like me'}]]
+	gsc._fetch = lambda text: ['alot of people', rows]
+	try:
+		got = gsc.correct('alot of people')
+		if got != 'a lot of people': fails.append('flag behind an echo: %r, wanted %r' % (got, 'a lot of people'))
+	finally:
+		gsc._fetch = real
+
+	f = gsc._flagged
+	cases = [
+		('recieve the', '<sc>receive</sc> the', '<se>recieve</se> the', 'receive the'),			# exact
+		('recieve', '<sc>received</sc> spelling', '<se>recieved</se> spelling', None),			# another word
+		('recieve the pakcage', '<sc>receive</sc> the <sc>package</sc> tracking',
+		 '<se>recieve</se> the <se>pakcage</se> tracking', 'receive the package'),			# two swaps, suffix dropped
+		('alot of', '<sc>a lot</sc> of people', '<se>alot</se> of people', 'a lot of'),		# ends inside a plain run
+		('alot of peop', '<sc>a lot</sc> of people', '<se>alot</se> of people', None),			# ends mid-word
+		('the pakc', 'the <sc>package</sc>', 'the <se>pakcage</se>', None),					# flagged word straddles the end
+		('the pakcage', 'a <sc>package</sc>', 'the <se>pakcage</se>', None),					# untagged text disagrees
+	]
+	for low, za, zb, want in cases:
+		got = f(low, za, zb)
+		if got != want: fails.append('_flagged(%r, %r) -> %r, wanted %r' % (low, zb, got, want))
+	return fails
+
+
 def main():
-	fails = check_highlight() + check_word_highlights() + check_selection() + check_fix_highlight()
+	fails = check_highlight() + check_word_highlights() + check_selection() + check_fix_highlight() + check_flagged()
 
 	for text, expected in OFFLINE:
 		got = gsc.correct(text)
@@ -294,8 +338,8 @@ def main():
 		if got != expected:
 			fails.append('case %r -> %r, wanted %r' % (text, got, expected))
 
-	# +3 highlight, +4 selection, +9 word-highlight, +5 fix-and-highlight
-	total = len(OFFLINE) + len(MISSPELLED) + len(CORRECT) + 2 + 3 + 4 + 9 + 5
+	# +3 highlight, +4 selection, +9 word-highlight, +5 fix-and-highlight, +10 flagged
+	total = len(OFFLINE) + len(MISSPELLED) + len(CORRECT) + 2 + 3 + 4 + 9 + 5 + 10
 	if fails:
 		print('\n%d of %d failed:' % (len(fails), total))
 		for f in fails: print('  ' + f)

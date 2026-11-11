@@ -1,0 +1,11 @@
+Google Spell Check 2.2.2
+========================
+
+Fixes misspellings that Google had quietly stopped correcting.
+
+Google's suggestions changed, and some common typos only show up flagged inside a
+longer search completion. "recieve" was left as-is (#32), and so was "alot of people".
+Both are corrected again: "receive", "a lot of people".
+
+Only the part you typed is changed. Anything Google corrects further along in its own
+completion is ignored.
